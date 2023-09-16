@@ -2,6 +2,8 @@ import numpy as np
 import nltk
 from math import log2 as log
 from nltk.corpus import inaugural
+from collections import defaultdict
+
 nltk.download('inaugural')
 nltk.download('stopwords')
 class CorpusReader_TFIDF():
@@ -46,7 +48,7 @@ class CorpusReader_TFIDF():
         pass
 
     def _populate_tf(self):
-        self.tf_dict = {}
+        self.tf_dict = defaultdict(lambda: 0)
         for nm in self.corpus.fileids():
             if self.tf == 'raw':
                 unique_values, counts = np.unique(self.words(nm), return_counts=True)
@@ -90,9 +92,9 @@ class CorpusReader_TFIDF():
         if self.idf == 'base':
             pass
         elif self.idf == 'smooth':
-            pass
+            pass #TODO Implement Smoothing
         else:
-            raise RuntimeError(f'{self.idf} is not valid. Please use either \'base\' or \'smooth\'')-
+            raise RuntimeError(f'{self.idf} is not valid. Please use either \'base\' or \'smooth\'')
 
 
 
@@ -100,10 +102,7 @@ class CorpusReader_TFIDF():
 
 if __name__ == '__main__':
     tmp = CorpusReader_TFIDF(inaugural,toStem=True,stopWord='standard',stemFirst=False)
-    words = set(tmp.words())
-    stops = set(nltk.corpus.stopwords.words('english'))
-    tmp._populate_idf()
-    d = tmp.idf_dict
-    print(d)
+    tmp._populate_tf()
+    
     # print(len(tmp.fileids()))
     
